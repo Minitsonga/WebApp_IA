@@ -1,27 +1,19 @@
-import express from 'express'
-import cors from 'cors'
-import dotenv from 'dotenv'
-
-dotenv.config()
-
-const app = express()
-const PORT = process.env.PORT || 4001
-
-app.use(cors({ origin: true }))
-app.use(express.json())
-
 const SYSTEM_PROMPT =
   "Tu es l'assistant virtuel de TimeTravel Agency, une agence de voyage temporel de luxe. Tu connais: Paris 1889 (Belle Époque, 4500€), Crétacé -65M (dinosaures, 8900€), Florence 1504 (Renaissance, 3800€). Réponds en français, sois concis et enthousiaste."
 
-app.post('/api/chat', async (req, res) => {
+export default async function handler(req, res) {
+  if (req.method !== 'POST') {
+    return res.status(405).json({ error: 'Méthode non autorisée' })
+  }
+
   const apiKey = process.env.GROQ_API_KEY
   if (!apiKey) {
     return res.status(500).json({
-      error: 'GROQ_API_KEY non configurée. Créez un fichier .env à la racine avec GROQ_API_KEY=votre_clé',
+      error: 'GROQ_API_KEY non configurée. Définissez-la dans les variables d’environnement Vercel.',
     })
   }
 
-  const { messages } = req.body
+  const { messages } = req.body || {}
   if (!Array.isArray(messages) || messages.length === 0) {
     return res.status(400).json({ error: 'messages requis (tableau non vide)' })
   }
@@ -39,7 +31,7 @@ app.post('/api/chat', async (req, res) => {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        model: 'llama-3.1-8b-instant', // Production 8B, rapide et économique. Alternatives: llama-3.3-70b-versatile (meilleure qualité), openai/gpt-oss-20b
+        model: 'llama-3.1-8b-instant',
         messages: conversationHistory,
         max_tokens: 500,
       }),
@@ -58,17 +50,4 @@ app.post('/api/chat', async (req, res) => {
     const message = e instanceof Error ? e.message : 'Erreur serveur'
     return res.status(500).json({ error: message })
   }
-})
-
-app.listen(PORT, () => {
-  console.log(`Serveur API sur http://localhost:${PORT}`)
-}).on('error', (err) => {
-  if (err.code === 'EADDRINUSE') {
-    console.error(`\nErreur: le port ${PORT} est déjà utilisé.`)
-    console.error('Fermez l\'autre instance du serveur (autre terminal) ou exécutez:')
-    console.error(`  npx kill-port ${PORT}`)
-    console.error('')
-    process.exit(1)
-  }
-  throw err
-})
+}
