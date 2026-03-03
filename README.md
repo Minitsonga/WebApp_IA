@@ -23,7 +23,7 @@ Webapp pour une agence de voyage temporel fictive, créée avec IA générative.
 
 - **Code** : Cursor (assistant IA) pour la conception et le développement
 - **Chatbot** : Groq — Llama 3.1 8B (`llama-3.1-8b-instant`) via API ; prompt système TimeTravel Agency (destinations et prix)
-- **Visuels** : Microsoft Bing (mai-image-1) 
+- **Visuels** : Microsoft Bing (mai-image-1)
 
 ## 📋 Crédits
 
