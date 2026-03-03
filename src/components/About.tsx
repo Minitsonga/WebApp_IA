@@ -1,3 +1,5 @@
+import { motion } from 'framer-motion'
+
 export default function About() {
   const stats = [
     { value: '3 Époques disponibles', label: '' },
@@ -7,7 +9,13 @@ export default function About() {
 
   return (
     <section id="about" className="py-16 sm:py-24 bg-dark-section">
-      <div className="max-w-3xl mx-auto px-4 sm:px-6 text-center">
+      <motion.div
+        className="max-w-3xl mx-auto px-4 sm:px-6 text-center"
+        initial={{ opacity: 0, y: 24 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, margin: '-50px' }}
+        transition={{ duration: 0.5 }}
+      >
         <p className="text-white/90 text-base sm:text-lg leading-relaxed mb-12">
           TimeTravel Agency réinvente le voyage. Grâce à nos technologies de pointe et nos partenariats
           exclusifs avec les gardiens du continuum, nous vous proposons des expériences temporelles
@@ -27,7 +35,7 @@ export default function About() {
             </li>
           ))}
         </ul>
-      </div>
+      </motion.div>
     </section>
   )
 }

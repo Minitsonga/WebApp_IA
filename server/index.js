@@ -64,7 +64,7 @@ app.listen(PORT, () => {
   if (err.code === 'EADDRINUSE') {
     console.error(`\nErreur: le port ${PORT} est déjà utilisé.`)
     console.error('Fermez l\'autre instance du serveur (autre terminal) ou exécutez:')
-    console.error('  npx kill-port 3001')
+    console.error(`  npx kill-port ${PORT}`)
     console.error('')
     process.exit(1)
   }
